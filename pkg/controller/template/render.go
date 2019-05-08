@@ -35,6 +35,7 @@ const (
 
 	platformAWS       = "aws"
 	platformAzure     = "azure"
+	platformBaremetal = "baremetal"
 	platformOpenstack = "openstack"
 	platformLibvirt   = "libvirt"
 	platformNone      = "none"
@@ -124,7 +125,7 @@ func platformFromControllerConfigSpec(ic *mcfgv1.ControllerConfigSpec) (string, 
 		return "", fmt.Errorf("cannot generateMachineConfigs with an empty platform field")
 	case platformBase:
 		return "", fmt.Errorf("platform _base unsupported")
-	case platformAWS, platformAzure, platformOpenstack, platformLibvirt, platformNone:
+	case platformAWS, platformAzure, platformBaremetal, platformOpenstack, platformLibvirt, platformNone:
 		// TODO: these constants are wrong, they should match what is reported by the infrastructure provider
 		return ic.Platform, nil
 	default:
@@ -374,6 +375,8 @@ func cloudProvider(cfg RenderConfig) (interface{}, error) {
 	// Don't forget to turn the test case back on as well
 	//case platformOpenstack:
 	//return platformOpenstack, nil
+	case platformBaremetal:
+		return platformBaremetal, nil
 	case platformVSphere:
 		return platformVSphere, nil
 	}
